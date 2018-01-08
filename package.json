@@ -1,0 +1,25 @@
+{
+  "name": "upload",
+  "version": "1.0.0",
+  "description": "a program for upload",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "oonnnoo",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2",
+    "multer": "^1.3.0",
+    "shortid": "^2.2.8"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oonnnoo/upload.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oonnnoo/upload/issues"
+  },
+  "homepage": "https://github.com/oonnnoo/upload#readme"
+}
