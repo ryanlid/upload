@@ -1,8 +1,6 @@
-FROM onnno/node
+FROM onnno/node:8
 
 MAINTAINER Dong Li (hi@lidong.me)
-
-ENV NODE_VERSION 6.11.0
 
 WORKDIR /data
 
@@ -15,4 +13,4 @@ EXPOSE 3000
 
 VOLUME [ "/data/storage" ]
 
-CMD [ "npm" "run" "start" ]
+CMD [ "npm", "run", "start" ]
