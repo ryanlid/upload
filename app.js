@@ -1,7 +1,8 @@
 const express = require('express')
 const multer = require('multer')
 const path = require('path')
-const shortid = require('shortid');
+const shortid = require('shortid')
+const config = require('dotenv').config()
 
 const app = express()
 const port = process.env.port || 3000
