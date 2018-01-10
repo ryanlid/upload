@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Upload File</title>
+  <style>
+    *{
+      box-sizing: border-box;
+    }
+
+    pre{
+      display: block;
+      padding: 10px;
+      margin: 0 0 10.5px;
+      font-size: 14px;
+      line-height: 1.42857143;
+      word-break: break-all;
+      word-wrap: break-word;
+      color: #333333;
+      background-color: #f5f5f5;
+      border: 1px solid #cccccc;
+      border-radius: 0;
+      overflow: auto;
+    }
+    pre code{
+      padding: 0;
+    font-size: inherit;
+    color: inherit;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 0;
+    }
+
+    .button{
+      align-items: center;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      display: inline-flex;
+      font-size: 1rem;
+      height: 2.25em;
+      justify-content: flex-start;
+      line-height: 1.5;
+      padding-bottom: calc(0.375em - 1px);
+      padding-left: calc(0.625em - 1px);
+      padding-right: calc(0.625em - 1px);
+      padding-top: calc(0.375em - 1px);
+      position: relative;
+      vertical-align: top;
+      user-select: none;
+      background-color: white;
+      border-color: #dbdbdb;
+      color: #363636;
+      justify-content: center;
+      padding-left: 0.75em;
+      padding-right: 0.75em;
+      text-align: center;
+      white-space: nowrap;
+      width: 18%;
+    }
+
+    .input{
+      border: 1px solid #dbdbdb;
+      border-radius: 3px;
+      box-shadow: none;
+      font-size: 1rem;
+      height: 2.25em;
+      padding-bottom: calc(0.375em - 1px);
+      padding-left: calc(0.625em - 1px);
+      padding-right: calc(0.625em - 1px);
+      padding-top: calc(0.375em - 1px);
+      background-color: white;
+      color: #363636;
+      width: 80%;
+    }
+
+    .container{
+      width: 600px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding-top: 20px;
+    }
+    #result{
+      display:none
+    }
+
+    #result img{
+      max-width: 100%;
+    }
+
+    .form{
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .pre-label{
+      color: #363636;
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="upform" class="form">
+      <input type="file" name="upfile" id="upfile" class="input" accept="image/jpeg,image/jpg,image/png,image/gif">
+      <button type="submit" class="button">提交</button>
+    </form>
+    <div id="result">
+      <div>
+        <div>
+          <div class="pre-label">URL </div>
+          <pre><code id="img-url"></code></pre>
+        </div>
+        <div>
+          <div class="pre-label">HTML</div>
+          <pre><code id="img-html"></code></pre>
+        </div>
+        <div>
+          <div class="pre-label">Markdown</div>
+          <pre><code id="img-markdown"></code></pre>
+        </div>
+        <div><img id="img-preview" src=''></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function submitFile(e){
+      e.preventDefault()
+      var file = document.getElementById('upfile')
+      var result = document.getElementById('result')
+      var formData = new FormData()
+      formData.append('upfile',file.files[0])
+      var xhr = new XMLHttpRequest()
+      xhr.onreadystatechange = function(event){
+        if(xhr.readyState === 4){
+          document.getElementById('result').style.display = 'block'
+          if(xhr.status === 200){
+            var res = xhr.response
+            res = JSON.parse(res)
+            if(res.code === "success"){
+              document.getElementById('img-url').innerText = res.data.url
+              document.getElementById('img-html').innerText = '<img src="' + res.data.url + '" alt="'+res.data.originalname+'" title="' + res.data.originalname+'"/>'
+              document.getElementById('img-markdown').innerText = '!['+res.data.originalname+']('+res.data.url+')'
+              document.getElementById('img-preview').setAttribute('src',res.data.url)
+            }else if(res.code === "error"){
+              result.innerHTML = res.msg
+            }else{
+              result.innerHTML ='上传失败'
+            }
+          }else{
+            result.innerHTML ='上传出错'
+          }
+        }
+      }
+      xhr.open('POST','./upload')
+      xhr.send(formData)
+    }
+
+  document.getElementById('upform').addEventListener('submit',submitFile)
+
+  </script>
+
+</body>
+</html>

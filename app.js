@@ -47,6 +47,10 @@ const upload = multer({
   }
 }).single('upfile')
 
+app.get('/',(req,res) => {
+  res.sendFile(__dirname +'/public/index.html');
+})
+
 app.post('/upload', (req, res) => {
   upload(req, res, (err) => {
     if (err) {
@@ -58,6 +62,8 @@ app.post('/upload', (req, res) => {
       res.send({
         code: 'success',
         data: {
+          originalname: req.file.originalname,
+          mimetype: req.file.mimetype,
           filename: req.file.filename,
           size: req.file.size,
           url: host_url + req.file.filename,
