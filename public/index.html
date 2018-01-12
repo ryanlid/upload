@@ -10,6 +10,20 @@
       box-sizing: border-box;
     }
 
+    html,body,div,p {
+      margin: 0;
+      padding: 0;
+    }
+
+    html,body{
+      height: 100%;
+    }
+
+    a{
+      color: #0366d6;
+      text-decoration: none;
+    }
+
     pre{
       display: block;
       padding: 10px;
@@ -24,13 +38,14 @@
       border-radius: 0;
       overflow: auto;
     }
+
     pre code{
       padding: 0;
-    font-size: inherit;
-    color: inherit;
-    white-space: pre-wrap;
-    background-color: transparent;
-    border-radius: 0;
+      font-size: inherit;
+      color: inherit;
+      white-space: pre-wrap;
+      background-color: transparent;
+      border-radius: 0;
     }
 
     .button{
@@ -79,7 +94,11 @@
       width: 600px;
       max-width: 100%;
       margin: 0 auto;
+    }
+
+    main{
       padding-top: 20px;
+      padding-bottom: 100px;
     }
     #result{
       display:none
@@ -101,32 +120,58 @@
       font-weight: 700;
     }
 
+    footer{
+      width: 100%;
+      background-color: #F5F5F5;
+      color: #999999;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      padding: 14px;
+    }
+
+    .tips{
+      line-height:20px;
+      font-size:.8em;
+    }
+
   </style>
 </head>
 <body>
   <div class="container">
-    <form id="upform" class="form">
-      <input type="file" name="upfile" id="upfile" class="input" accept="image/jpeg,image/jpg,image/png,image/gif">
-      <button type="submit" class="button">提交</button>
-    </form>
-    <div id="result">
-      <div>
+    <main>
+      <form id="upform" class="form">
+        <input type="file" name="upfile" id="upfile" class="input" accept="image/jpeg,image/jpg,image/png,image/gif">
+        <button type="submit" class="button">提交</button>
+      </form>
+      <div id="result">
         <div>
-          <div class="pre-label">URL </div>
-          <pre><code id="img-url"></code></pre>
+          <div>
+            <div class="pre-label">URL </div>
+            <pre><code id="img-url"></code></pre>
+          </div>
+          <div>
+            <div class="pre-label">HTML</div>
+            <pre><code id="img-html"></code></pre>
+          </div>
+          <div>
+            <div class="pre-label">Markdown</div>
+            <pre><code id="img-markdown"></code></pre>
+          </div>
+          <div><img id="img-preview" src=''></div>
         </div>
-        <div>
-          <div class="pre-label">HTML</div>
-          <pre><code id="img-html"></code></pre>
-        </div>
-        <div>
-          <div class="pre-label">Markdown</div>
-          <pre><code id="img-markdown"></code></pre>
-        </div>
-        <div><img id="img-preview" src=''></div>
+      </div>
+    </main>
+
+  </div>
+  <footer>
+    <div class="container">
+      <div class="tips">
+        <p>请勿上传违反中国大陆法律的图片，违者后果自负。由于空间有限，上传的图片可能被不定时删除。</p>
+        <p>© 2018 Powered by <a href="https://github.com/oonnnoo/upload">Upload</a> | <a href="https://lidong.me">lidong.me</a> | 有任何问题，欢迎联系我：hi#oonnnoo.com</p>
       </div>
     </div>
-  </div>
+  </footer>
   <script>
     function submitFile(e){
       e.preventDefault()
