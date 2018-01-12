@@ -3,7 +3,7 @@
 ## 图片上传文档
 
 - HTTP 请求方式 ：	POST
-- URL : https://upload.oonnnoo.com
+- URL : https://upload.oonnnoo.com/upload
 
 ### 请求参数
 
