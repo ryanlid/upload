@@ -145,6 +145,7 @@
         <button type="submit" class="button">提交</button>
       </form>
       <div id="result">
+        <div id="result-error"></div>
         <div>
           <div>
             <div class="pre-label">URL </div>
@@ -177,6 +178,7 @@
       e.preventDefault()
       var file = document.getElementById('upfile')
       var result = document.getElementById('result')
+      var resultError = document.getElementById('result-error')
       var formData = new FormData()
       formData.append('upfile',file.files[0])
       var xhr = new XMLHttpRequest()
@@ -187,17 +189,18 @@
             var res = xhr.response
             res = JSON.parse(res)
             if(res.code === "success"){
+              resultError.innerHTML = ''
               document.getElementById('img-url').innerText = res.data.url
               document.getElementById('img-html').innerText = '<img src="' + res.data.url + '" alt="'+res.data.originalname+'" title="' + res.data.originalname+'"/>'
               document.getElementById('img-markdown').innerText = '!['+res.data.originalname+']('+res.data.url+')'
               document.getElementById('img-preview').setAttribute('src',res.data.url)
             }else if(res.code === "error"){
-              result.innerHTML = res.msg
+              resultError.innerHTML = res.msg
             }else{
-              result.innerHTML ='上传失败'
+              resultError.innerHTML ='上传失败'
             }
           }else{
-            result.innerHTML ='上传出错'
+            resultError.innerHTML ='上传出错'
           }
         }
       }
