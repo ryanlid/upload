@@ -176,11 +176,11 @@
   <script>
     function submitFile(e){
       e.preventDefault()
-      var file = document.getElementById('upfile')
+      var upfile = document.getElementById('upfile')
       var result = document.getElementById('result')
       var resultError = document.getElementById('result-error')
       var formData = new FormData()
-      formData.append('upfile',file.files[0])
+      formData.append('upfile',upfile.files[0])
       var xhr = new XMLHttpRequest()
       xhr.onreadystatechange = function(event){
         if(xhr.readyState === 4){
@@ -189,6 +189,7 @@
             var res = xhr.response
             res = JSON.parse(res)
             if(res.code === "success"){
+              upfile.value=''
               resultError.innerHTML = ''
               document.getElementById('img-url').innerText = res.data.url
               document.getElementById('img-html').innerText = '<img src="' + res.data.url + '" alt="'+res.data.originalname+'" title="' + res.data.originalname+'"/>'
