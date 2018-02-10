@@ -3,6 +3,7 @@ const multer = require('multer')
 const path = require('path')
 const shortid = require('shortid')
 const config = require('dotenv').config()
+const cors = require('cors')
 
 const app = express()
 const port = process.env.port || 3000
@@ -51,7 +52,7 @@ app.get('/',(req,res) => {
   res.sendFile(__dirname +'/public/index.html');
 })
 
-app.post('/upload', (req, res) => {
+app.post('/upload',cors(), (req, res) => {
   upload(req, res, (err) => {
     if (err) {
       res.send({
