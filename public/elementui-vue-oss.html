@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Upload File</title>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.0.5/theme-chalk/index.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body,
+    div,
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    a {
+      color: #0366d6;
+      text-decoration: none;
+    }
+
+    pre {
+      display: block;
+      padding: 10px;
+      margin: 0 0 10.5px;
+      font-size: 14px;
+      line-height: 1.42857143;
+      word-break: break-all;
+      word-wrap: break-word;
+      color: #333333;
+      background-color: #f5f5f5;
+      border: 1px solid #cccccc;
+      border-radius: 0;
+      overflow: auto;
+    }
+
+    pre code {
+      padding: 0;
+      font-size: inherit;
+      color: inherit;
+      white-space: pre-wrap;
+      background-color: transparent;
+      border-radius: 0;
+    }
+
+    .container {
+      width: 600px;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    .file-input {
+      width: 178px;
+      height: 178px;
+      display: block;
+    }
+
+    .file-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 178px;
+      height: 178px;
+      line-height: 178px;
+      text-align: center;
+    }
+
+    .file-uploader .el-upload {
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result img {
+      max-width: 100%;
+    }
+
+    .pre-label {
+      color: #363636;
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    footer {
+      width: 100%;
+      background-color: #F5F5F5;
+      color: #999999;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      padding: 14px;
+    }
+
+    .tips {
+      line-height: 20px;
+      font-size: .8em;
+    }
+
+    h1{
+      font-size: 100%;
+      margin: 0;
+      padding-top:0.67em;
+      padding-bottom:0.67em;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+        <h1>使用 ElementUI 中 Upload 上传组件实现上传文件至阿里云OSS </h1>
+      <template>
+        <el-form>
+          <el-form-item>
+            <el-row>
+              <el-col :span="24">
+                <el-upload
+                class="file-uploader"
+                :action="ossHost"
+                :data="ossParam"
+                :show-file-list="false"
+                :on-success="handleFileSuccess"
+                :before-upload="beforeFileUpload"
+                accept="image/jpeg,image/jpg,image/png,image/gif">
+                  <div class="file-input">
+                    <i class="el-icon-plus file-uploader-icon"></i>
+                  </div>
+                </el-upload>
+                <p>选取文件后立即进行上传</p>
+                <small>图片支持 jpg/jpeg、png、gif 格式，大小不超过10M</small>
+                <div class="result">
+                  <pre v-if="imagePreviewUrl"><code v-text="imagePreviewUrl"></code></pre>
+                  <img v-if="imagePreviewUrl" :src="imagePreviewUrl+'?x-oss-process=image/resize,w_600'">
+                </div>
+              </el-col>
+            </el-row>
+          </el-form-item>
+        </el-form>
+      </template>
+    </div>
+    <footer>
+      <div class="container">
+        <div class="tips">
+          <p>请勿上传违反中国大陆法律的文件，违者后果自负。由于资源有限，仅供测试使用，上传的文件可能被不定时删除。</p>
+          <p>© 2018 Powered by <a href="https://github.com/oonnnoo/upload">Upload</a> | <a href="https://lidong.me">lidong.me</a> | 有任何问题，欢迎联系我：hi#oonnnoo.com</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="//cdn.bootcss.com/vue/2.5.9/vue.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/element-ui@2.0.5/lib/index.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          ossParam: {
+            dir: '',
+            // oss保存路径+文件名
+            key: '',
+            policy: '',
+            OSSAccessKeyId: '',
+            signature: '',
+            // success_action_status:'200',// 默认返回204
+          },
+          ossHost: 'http://onno.oss-cn-hangzhou.aliyuncs.com/',
+          imagePreviewUrl: ''
+        }
+      },
+
+      methods: {
+        // 文件上传
+        beforeFileUpload(file) {
+          this.imagePreviewUrl = ''
+          var isImg = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
+          var isLt10M = file.size / 1024 / 1024 < 10;
+          if (!isImg) {
+            this.$message.error('上传图片只能是 JPG 格式或 PNG 格式!');
+          }
+          if (!isLt10M) {
+            this.$message.error('上传图片大小不能超过 10MB!');
+          }
+          // 文件后缀
+          var suffix = file.name.split('.').pop()
+          // 上传保存文件名
+          var distname = window.btoa(file.size) + Date.parse(new Date()) + parseInt(1000 * Math.random()) + '.' + suffix
+          this.ossParam.key = this.ossParam.dir + distname
+          return isImg && isLt10M;
+        },
+        // 文件上传完成
+        handleFileSuccess: function (res, file) {
+          // this.imagePreviewUrl = URL.createObjectURL(file.raw);
+          this.imagePreviewUrl = this.ossHost + this.ossParam.key;
+          // console.log(this.ossHost + this.ossParam.key)
+        },
+
+        getKey: function () {
+          var self = this
+          $.ajax({
+            type: 'get',
+            url: 'https://file.oonnnoo.com/config/oss/onno-oss-cn-hangzhou.php',
+            success: function (data) {
+              var obj = JSON.parse(data)
+              // dir为上传目录，不是上传必须的参数，为后续添加文件名所用
+              self.ossParam.dir = obj.dir
+              self.ossParam.key = ''
+              self.ossParam.policy = obj.policy
+              self.ossParam.OSSAccessKeyId = obj.accessid
+              self.ossParam.signature = obj.signature
+            }
+          })
+        },
+      },
+      created: function () {
+        this.getKey()
+      }
+    })
+
+  </script>
+</body>
+
+</html>
