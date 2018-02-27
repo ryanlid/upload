@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Upload File</title>
-  <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.0.5/theme-chalk/index.css">
+  <link rel="stylesheet" href="//cdn.bootcss.com/element-ui/2.0.5/theme-chalk/index.css">
   <style>
     * {
       box-sizing: border-box;
@@ -178,7 +178,7 @@
             signature: '',
             // success_action_status:'200',// 默认返回204
           },
-          ossHost: 'http://onno.oss-cn-hangzhou.aliyuncs.com/',
+          ossHost: '//oss.oonnnoo.com/',
           imagePreviewUrl: ''
         }
       },
@@ -213,7 +213,7 @@
           var self = this
           $.ajax({
             type: 'get',
-            url: 'https://file.oonnnoo.com/config/oss/onno-oss-cn-hangzhou.php',
+            url: '//file.oonnnoo.com/config/oss/onno-oss-cn-hangzhou.php',
             success: function (data) {
               var obj = JSON.parse(data)
               // dir为上传目录，不是上传必须的参数，为后续添加文件名所用
