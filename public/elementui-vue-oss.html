@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Upload File</title>
+  <title>使用 ElementUI 中 Upload 上传组件实现上传文件至阿里云OSS</title>
   <link rel="stylesheet" href="//cdn.bootcss.com/element-ui/2.0.5/theme-chalk/index.css">
   <style>
     * {
@@ -109,11 +109,15 @@
       font-size: .8em;
     }
 
-    h1{
+    h1 {
       font-size: 100%;
       margin: 0;
       padding-top:0.67em;
       padding-bottom:0.67em;
+    }
+
+    .file-uploader-wrapper {
+      margin-bottom: 84px;
     }
 
   </style>
@@ -121,7 +125,7 @@
 
 <body>
   <div id="app">
-    <div class="container">
+    <div class="container file-uploader-wrapper">
         <h1>使用 ElementUI 中 Upload 上传组件实现上传文件至阿里云OSS </h1>
       <template>
         <el-form>
@@ -143,7 +147,7 @@
                 <p>选取文件后立即进行上传</p>
                 <small>图片支持 jpg/jpeg、png、gif 格式，大小不超过10M</small>
                 <div class="result">
-                  <pre v-if="imagePreviewUrl"><code v-text="'https://'+imagePreviewUrl"></code></pre>
+                  <pre v-if="imagePreviewUrl"><code v-text="'https:'+imagePreviewUrl"></code></pre>
                   <img v-if="imagePreviewUrl" :src="imagePreviewUrl+'?x-oss-process=image/resize,w_600'">
                 </div>
               </el-col>
