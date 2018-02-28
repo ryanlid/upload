@@ -143,7 +143,7 @@
                 <p>选取文件后立即进行上传</p>
                 <small>图片支持 jpg/jpeg、png、gif 格式，大小不超过10M</small>
                 <div class="result">
-                  <pre v-if="imagePreviewUrl"><code v-text="imagePreviewUrl"></code></pre>
+                  <pre v-if="imagePreviewUrl"><code v-text="'https://'+imagePreviewUrl"></code></pre>
                   <img v-if="imagePreviewUrl" :src="imagePreviewUrl+'?x-oss-process=image/resize,w_600'">
                 </div>
               </el-col>
@@ -178,7 +178,7 @@
             signature: '',
             // success_action_status:'200',// 默认返回204
           },
-          ossHost: '//oss.oonnnoo.com/',
+          ossHost: '//onno.oss-cn-hangzhou.aliyuncs.com/',
           imagePreviewUrl: ''
         }
       },
