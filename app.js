@@ -55,6 +55,13 @@ app.get('/',(req,res) => {
 })
 
 app.post('/upload',cors(), (req, res) => {
+  if(req.hostname === 'upload.lidong.me'){
+    reqUrl = 'https://static.lidong.me/upload/images/'
+  }else if(req.hostname === 'upload.oonnnoo.com'){
+    reqUrl = 'https://static.oonnnoo.com/upload/images/'
+  }else{
+    reqUrl = host_url
+  }
   upload(req, res, (err) => {
     if (err) {
       res.send({
@@ -69,7 +76,7 @@ app.post('/upload',cors(), (req, res) => {
           mimetype: req.file.mimetype,
           filename: req.file.filename,
           size: req.file.size,
-          url: host_url + req.file.filename,
+          url: reqUrl + req.file.filename,
         }
       })
     }
