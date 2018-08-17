@@ -68,7 +68,7 @@ app.post('/upload',cors(), (req, res) => {
         code: 'error',
         msg: err.code || err
       })
-    } else {
+    } else if(req.file) {
       res.send({
         code: 'success',
         data: {
@@ -78,6 +78,11 @@ app.post('/upload',cors(), (req, res) => {
           size: req.file.size,
           url: reqUrl + req.file.filename,
         }
+      })
+    }else{
+      res.send({
+        code: 'error',
+        msg: 'File is empty.'
       })
     }
   })
