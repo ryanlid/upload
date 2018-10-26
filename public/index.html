@@ -177,13 +177,18 @@
     </div>
   </footer>
   <script>
+    // 表单提交上传
     function submitFile(e) {
       e.preventDefault()
-      var upfile = document.getElementById('upfile')
+      var upfile = document.getElementById('upfile').files
+      uploadFile(upfile.files[0])
+    }
+
+    function uploadFile(file) {
       var result = document.getElementById('result')
       var resultError = document.getElementById('result-error')
       var formData = new FormData()
-      formData.append('upfile', upfile.files[0])
+      formData.append('upfile', file)
       var xhr = new XMLHttpRequest()
       xhr.onreadystatechange = function (event) {
         if (xhr.readyState === 4) {
@@ -212,7 +217,19 @@
       xhr.send(formData)
     }
 
+    // 文件拖动上传
+    function dropfile(event) {
+      event.preventDefault();
+      var upfile = event.dataTransfer.files
+      uploadFile(upfile[0])
+    }
+
     document.getElementById('upform').addEventListener('submit', submitFile)
+    document.addEventListener("dragover", function (event) {
+      // 阻止默认动作以启用drop
+      event.preventDefault();
+    }, false)
+    document.addEventListener('drop', dropfile)
 
   </script>
 
