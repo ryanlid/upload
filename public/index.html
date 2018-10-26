@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -137,6 +138,7 @@
 
   </style>
 </head>
+
 <body>
   <div class="container">
     <main>
@@ -175,44 +177,45 @@
     </div>
   </footer>
   <script>
-    function submitFile(e){
+    function submitFile(e) {
       e.preventDefault()
       var upfile = document.getElementById('upfile')
       var result = document.getElementById('result')
       var resultError = document.getElementById('result-error')
       var formData = new FormData()
-      formData.append('upfile',upfile.files[0])
+      formData.append('upfile', upfile.files[0])
       var xhr = new XMLHttpRequest()
-      xhr.onreadystatechange = function(event){
-        if(xhr.readyState === 4){
+      xhr.onreadystatechange = function (event) {
+        if (xhr.readyState === 4) {
           document.getElementById('result').style.display = 'block'
-          if(xhr.status === 200){
+          if (xhr.status === 200) {
             var res = xhr.response
             res = JSON.parse(res)
-            if(res.code === "success"){
-              upfile.value=''
+            if (res.code === "success") {
+              upfile.value = ''
               resultError.innerHTML = ''
               document.getElementById('img-url').innerText = res.data.url
-              document.getElementById('img-html').innerText = '<img src="' + res.data.url + '" alt="'+res.data.originalname+'" title="' + res.data.originalname+'"/>'
-              document.getElementById('img-markdown').innerText = '!['+res.data.originalname+']('+res.data.url+')'
-              document.getElementById('img-preview').setAttribute('src',res.data.url)
-            }else if(res.code === "error"){
+              document.getElementById('img-html').innerText = '<img src="' + res.data.url + '" alt="' + res.data.originalname + '" title="' + res.data.originalname + '"/>'
+              document.getElementById('img-markdown').innerText = '![' + res.data.originalname + '](' + res.data.url + ')'
+              document.getElementById('img-preview').setAttribute('src', res.data.url)
+            } else if (res.code === "error") {
               resultError.innerHTML = res.msg
-            }else{
-              resultError.innerHTML ='上传失败'
+            } else {
+              resultError.innerHTML = '上传失败'
             }
-          }else{
-            resultError.innerHTML ='上传出错'
+          } else {
+            resultError.innerHTML = '上传出错'
           }
         }
       }
-      xhr.open('POST','./upload')
+      xhr.open('POST', './upload')
       xhr.send(formData)
     }
 
-  document.getElementById('upform').addEventListener('submit',submitFile)
+    document.getElementById('upform').addEventListener('submit', submitFile)
 
   </script>
 
 </body>
+
 </html>
