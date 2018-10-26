@@ -177,13 +177,7 @@
     </div>
   </footer>
   <script>
-    // 表单提交上传
-    function submitFile(e) {
-      e.preventDefault()
-      var upfile = document.getElementById('upfile').files
-      uploadFile(upfile.files[0])
-    }
-
+    // 上传文件
     function uploadFile(file) {
       var result = document.getElementById('result')
       var resultError = document.getElementById('result-error')
@@ -217,10 +211,23 @@
       xhr.send(formData)
     }
 
-    // 文件拖动上传
+    // 表单提交
+    function submitFile(e) {
+      e.preventDefault()
+      var upfile = document.getElementById('upfile').files
+      uploadFile(upfile.files[0])
+    }
+    // 文件拖拽提交
     function dropfile(event) {
       event.preventDefault();
       var upfile = event.dataTransfer.files
+      uploadFile(upfile[0])
+    }
+    // 剪切板粘贴提交
+    function pastefile(event){
+      event.preventDefault();
+      console.log(event)
+      var upfile = event.clipboardData.files
       uploadFile(upfile[0])
     }
 
@@ -230,6 +237,7 @@
       event.preventDefault();
     }, false)
     document.addEventListener('drop', dropfile)
+    document.addEventListener('paste', pastefile)
 
   </script>
 
