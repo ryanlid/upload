@@ -14,7 +14,7 @@ const savePath = __dirname+ '/storage/'
 // 校验文件
 function checkFile(file, callback) {
   // 允许的后缀名
-  const fileTypes = /jpeg|jpg|gif|png/
+  const fileTypes = /jpeg|jpg|gif|png|bmp|webp|psd|mp3|wav|wma|mp4|m4a|avi|mov|mkv|zip|rar|7z|doc|docx|xls|xlsx|ppt|pptx|txt|md|/
   const extname = fileTypes.test(path.extname(file.originalname).toLowerCase())
   // 检查mimetype
   const mimetype = fileTypes.test(file.mimetype)
@@ -49,8 +49,8 @@ const upload = multer({
   storage: storage,
   limits: {
     files: 1,
-    // 限制文件的大小为10MB
-    fileSize: 10 * 1024 * 1024,
+    // 限制文件的大小为50MB
+    fileSize: 50 * 1024 * 1024,
     fields: 1
   },
   fileFilter: function (req, file, callback) {
