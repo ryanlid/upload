@@ -4,10 +4,12 @@ const path = require('path')
 const shortid = require('shortid')
 const config = require('dotenv').config()
 const cors = require('cors')
+const fs = require('fs')
 
 const app = express()
 const port = process.env.port || 3000
-const host_url = process.env.host_url || 'https://static.oonnnoo.com/upload/images/'
+const host_url = process.env.host_url + ':' + port
+const savePath = __dirname+ '/storage/'
 
 // 校验文件
 function checkFile(file, callback) {
@@ -28,7 +30,15 @@ function checkFile(file, callback) {
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, './storage/images/')
+    fs.exists(savePath, function (exists) {
+      if (!exists) {
+        fs.mkdirSync(savePath, { recursive: true }, function (err) {
+          if (err) throw err;
+          console.info('创建文件夹:' + savePath)
+        })
+      }
+      callback(null, savePath)
+    })
   },
   filename: function (req, file, callback) {
     callback(null, (shortid.generate() + path.extname(file.originalname)))
@@ -49,17 +59,18 @@ const upload = multer({
 }).single('upfile')
 
 app.use(express.static('public'))
+app.use(express.static('storage'))
 
-app.get('/',(req,res) => {
-  res.sendFile(__dirname +'/public/index.html');
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
 })
 
-app.post('/upload',cors(), (req, res) => {
-  if(req.hostname === 'upload.lidong.me'){
-    reqUrl = 'https://static.lidong.me/upload/images/'
-  }else if(req.hostname === 'upload.oonnnoo.com'){
-    reqUrl = 'https://static.oonnnoo.com/upload/images/'
-  }else{
+app.post('/upload', cors(), (req, res) => {
+  if (req.hostname === 'upload.lidong.me') {
+    reqUrl = 'https://static.lidong.me/upload'
+  } else if (req.hostname === 'upload.oonnnoo.com') {
+    reqUrl = 'https://static.oonnnoo.com/upload'
+  } else {
     reqUrl = host_url
   }
   upload(req, res, (err) => {
@@ -68,18 +79,18 @@ app.post('/upload',cors(), (req, res) => {
         code: 'error',
         msg: err.code || err
       })
-    } else if(req.file) {
+    } else if (req.file) {
       res.send({
         code: 'success',
         data: {
-          originalname: req.file.originalname,
-          mimetype: req.file.mimetype,
           filename: req.file.filename,
+          mimetype: req.file.mimetype,
+          originalname: req.file.originalname,
           size: req.file.size,
-          url: reqUrl + req.file.filename,
+          url: reqUrl + '/' + req.file.filename,
         }
       })
-    }else{
+    } else {
       res.send({
         code: 'error',
         msg: 'File is empty.'
