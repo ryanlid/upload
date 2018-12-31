@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Upload File</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <header>
+    <div class="cell logo">Upload</div>
+    <div class="cell">
+      <a href="./xhr.html">
+        旧版上传
+      </a>
+    </div>
+    <div class="cell">
+      <a href="./elementui-vue-oss.html">
+        上传至oss
+      </a>
+    </div>
+  </header>
+  <div class="container">
+    <div class="file-container">
+      <div class="file-drop-zone">
+        <div class="file-drop-title">
+          拖拽到文件到这里
+        </div>
+        <div id="file-drop-content" class="file-drop-content">
+        </div>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div class="tab">
+        <div>
+          <div class="tab-header">
+            <div class="tab-wrap">
+              <div class="tab-head is-active">Link</div>
+              <div class="tab-head">Html</div>
+              <div class="tab-head ">Markdown</div>
+              <div class="tab-head">Markdown ( with Link )</div>
+            </div>
+          </div>
+          <div class="tab-content">
+            <div class="tab-pane is-active">
+            </div>
+            <div class="tab-pane">
+            </div>
+            <div class="tab-pane">
+            </div>
+            <div class="tab-pane">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="button-wrapper">
+        <button class="btn">
+          清空
+        </button>
+        <label for="upfile" class="btn primary">
+          选择文件
+        </label>
+      </div>
+      <input type="file" name="upfile" hidden id="upfile" class="input" accept="image/jpeg,image/jpg,image/png,image/gif">
+    </div>
+  </div>
+
+  <footer>
+    <div class="tips">
+      <p>请勿上传违反中国大陆法律的图片，违者后果自负。本项目仅供测试使用，上传的图片可能不定时被删除。</p>
+      <p>© 2019 Powered by <a href="https://github.com/ryanlid/upload">Upload</a> | <a href="https://lidong.me">lidong.me</a> | 有任何问题，请联系我：upload#lidong.me</p>
+    </div>
+  </footer>
+
+  <script>
+    var tabHead = document.querySelectorAll('.tab-head');
+    var tabPane = document.querySelectorAll('.tab-pane');
+    var fileDropZone = document.querySelector('.file-drop-zone')
+    var fileArray = []
+
+    for (var i = 0; i < tabHead.length; i++) {
+      tabHead[i].index = i;
+      tabHead[i].onclick = function () {
+        for (var j = 0; j < tabHead.length; j++) {
+          tabHead[j].classList.remove('is-active')
+          tabPane[j].classList.remove('is-active')
+        }
+        tabPane[this.index].classList.add('is-active')
+        this.classList.add('is-active')
+      }
+    }
+    document.addEventListener("dragover", function (event) {
+      // 阻止默认动作以启用drop
+      event.preventDefault();
+    }, false)
+
+    document.addEventListener('drop', function (e) {
+      e.preventDefault()
+    })
+
+    fileDropZone.addEventListener('dragover', function (e) {
+      this.style.backgroundColor = 'gray'
+    });
+
+    fileDropZone.addEventListener('dragleave', function (e) {
+      this.style.backgroundColor = 'white'
+    });
+
+    fileDropZone.addEventListener('drop', function (e) {
+      var upfile = event.dataTransfer.files
+      this.style.backgroundColor = 'white'
+      appendFile(upfile[0])
+    })
+    // 选择文件上传
+    document.getElementById('upfile').addEventListener('change', function (e) {
+      appendFile(e.target.files[0])
+    })
+
+    document.addEventListener('paste', function (e) {
+      appendFile(e.clipboardData.files[0])
+    })
+
+    // 添加文件到拖拽区域
+    function appendFile(file) {
+      if (!file) return;
+      var reader = new FileReader();
+      var previewUrl = ''
+      reader.addEventListener('load', function () {
+        imgSrc = reader.result
+        filePreview(imgSrc, file)
+      })
+
+      if (file.type.indexOf('image') !== -1 || file.type.indexOf('video') !== -1) {
+        reader.readAsDataURL(file);
+      } else {
+        imgSrc = 'https://static.lidong.me/upload/images/83AeTNRx3.png'
+        filePreview(imgSrc, file)
+      }
+      uploadFile(file)
+    }
+    // 文件预览图显示
+    function filePreview(previewUrl, file) {
+      var div = document.createElement('div');
+      var img = document.createElement('img')
+      var str = ''
+      div.className = "file-preview-frame"
+      document.querySelector('.file-drop-title').classList.add('hidden')
+
+
+      str = ['<div class="file-preview-thumbnails">',
+        '    <img src="',
+        previewUrl,
+        '    " alt=""></div>',
+        '    <div class="file-footer-caption">',
+        '    <div class="file-caption-info">',
+        file.name,
+        '    </div><div class="file-size-info">',
+        sizeFormat(file.size),
+        '    </div>',
+        '  </div>',
+        '<div class="file-footer-buttons">',
+        '  <button class="file-delete">x</button>',
+        '</div>'
+      ].join("");
+      div.innerHTML = str
+      document.getElementById('file-drop-content').appendChild(div)
+    }
+
+    function sizeFormat(size) {
+      if (size < 1024) {
+        return size + 'B'
+      } else if (size > 1024 && size < 1024 * 1024) {
+        return (size / 1024).toFixed(2) + ' KB'
+      } else if (size > 1024 * 1024 && size < 1024 * 1024 * 1024) {
+        return (size / 1024 / 1024).toFixed(2) + ' MB'
+      } else {
+        return (size / 1024 / 1024 / 1024).toFixed(2) + ' GB'
+      }
+    }
+
+    function uploadFile(file) {
+      var formData = new FormData()
+      formData.append('upfile', file)
+      fetch('./upload', {
+          method: 'post',
+          body: formData
+        }).then(function (res) {
+          return res.json()
+        }).catch(function (err) {
+          console.log(err)
+        })
+        .then(res => {
+          console.log(res)
+          document.querySelector('.tab').classList.remove('hidden')
+          var code1 = document.createElement('code')
+          var code2 = document.createElement('code')
+          var code3 = document.createElement('code')
+          var code4 = document.createElement('code')
+          code1.innerHTML = '<pre>' + res.data.url + '</pre>'
+          code2.innerHTML = '<pre>&lt;img src="' + res.data.url + '" alt="' + res.data.originalname + '" title="' + res.data.originalname + '"/&gt;</pre>'
+          code3.innerHTML = '<pre>![' + res.data.originalname + '](' + res.data.url + ')</pre>'
+          code4.innerHTML = '<pre>[![' + res.data.originalname + '](' + res.data.url + ')](' + res.data.url + ')</pre>'
+          tabPane[0].appendChild(code1)
+          tabPane[1].appendChild(code2)
+          tabPane[2].appendChild(code3)
+          tabPane[3].appendChild(code4)
+        })
+
+    }
+
+  </script>
+</body>
+
+</html>
