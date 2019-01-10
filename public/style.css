@@ -7,6 +7,20 @@ html,body,div{
   display: none;
 }
 
+.text-ellipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clearfix:before,
+.clearfix:after{
+  display: table;
+  content: " ";
+}
+.clearfix:after{
+  clear: both;
+}
 header {
   height: 64px;
   line-height: 64px;
@@ -35,6 +49,7 @@ header a:hover {
 }
 
 footer{
+  box-sizing: border-box;
   width: 100%;
   background-color: #F5F5F5;
   color: #999999;
@@ -56,13 +71,14 @@ footer p{
 
 .container {
   width: 1200px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 108px;
 }
 
 .file-container {
   border: solid 1px #ddd;
-  height: 300px;
   padding: 12px 15px;
 }
 
@@ -75,6 +91,7 @@ footer p{
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
+  flex-direction: row-reverse;
 }
 
 .btn {
@@ -133,7 +150,7 @@ footer p{
 }
 
 .tab-head {
-  padding: 10px 20px;
+  padding: 10px;
   height: 100%;
 }
 
@@ -146,6 +163,23 @@ footer p{
 
 .button-wrapper {
   margin-left: 10px;
+}
+
+@media (max-width: 500px) {
+  .wrapper {
+    display: block;
+  }
+  .tab {
+    width: unset;
+  }
+  .tab-content{
+    padding-bottom: 10px;
+  }
+  .button-wrapper {
+    margin-left: 0;
+    margin-bottom: 10px;
+    width: 100%;
+  }
 }
 
 .tab-pane {
@@ -167,6 +201,7 @@ code pre {
 
 
 .file-drop-title {
+  user-select: none;
   color: #aaa;
   font-size: 1.6em;
   padding: 85px 10px;

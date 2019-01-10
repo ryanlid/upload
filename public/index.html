@@ -13,57 +13,52 @@
   <header>
     <div class="cell logo">Upload</div>
     <div class="cell">
-      <a href="./xhr.html">
-        旧版上传
-      </a>
-    </div>
-    <div class="cell">
-      <a href="./elementui-vue-oss.html">
-        上传至oss
-      </a>
+      <div>
+        <a href="./xhr.html">
+          旧版上传
+        </a>
+        <a href="./elementui-vue-oss.html">
+          上传至oss
+        </a>
+      </div>
     </div>
   </header>
   <div class="container">
     <div class="file-container">
       <div class="file-drop-zone">
         <div class="file-drop-title">
-          拖拽到文件到这里
+          拖拽到文件到这里上传
         </div>
-        <div id="file-drop-content" class="file-drop-content">
+        <div id="file-drop-content" class="file-drop-content clearfix">
         </div>
       </div>
     </div>
     <div class="wrapper">
-      <div class="tab">
-        <div>
-          <div class="tab-header">
-            <div class="tab-wrap">
-              <div class="tab-head is-active">Link</div>
-              <div class="tab-head">Html</div>
-              <div class="tab-head ">Markdown</div>
-              <div class="tab-head">Markdown ( with Link )</div>
-            </div>
-          </div>
-          <div class="tab-content">
-            <div class="tab-pane is-active">
-            </div>
-            <div class="tab-pane">
-            </div>
-            <div class="tab-pane">
-            </div>
-            <div class="tab-pane">
-
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="button-wrapper">
-        <button class="btn">
-          清空
-        </button>
         <label for="upfile" class="btn primary">
           选择文件
         </label>
+      </div>
+      <div class="tab">
+        <div class="tab-header">
+          <div class="tab-wrap">
+            <div class="tab-head is-active">Link</div>
+            <div class="tab-head">Html</div>
+            <div class="tab-head">Markdown</div>
+            <div class="tab-head text-ellipsis">Markdown (with Link)</div>
+          </div>
+        </div>
+        <div class="tab-content">
+          <div class="tab-pane is-active">
+          </div>
+          <div class="tab-pane">
+          </div>
+          <div class="tab-pane">
+          </div>
+          <div class="tab-pane">
+
+          </div>
+        </div>
       </div>
       <input type="file" name="upfile" hidden id="upfile" class="input" accept="image/jpeg,image/jpg,image/png,image/gif">
     </div>
@@ -161,10 +156,7 @@
         '    </div><div class="file-size-info">',
         sizeFormat(file.size),
         '    </div>',
-        '  </div>',
-        '<div class="file-footer-buttons">',
-        '  <button class="file-delete">x</button>',
-        '</div>'
+        '  </div>'
       ].join("");
       div.innerHTML = str
       document.getElementById('file-drop-content').appendChild(div)
