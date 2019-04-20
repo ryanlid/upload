@@ -10,6 +10,9 @@ const app = express()
 const port = process.env.port || 3000
 const host_url = process.env.host_url + ':' + port
 const savePath = __dirname+ '/storage/'
+const corsOptions={
+  origin:'*'
+}
 
 // 校验文件
 function checkFile(file, callback) {
@@ -65,7 +68,8 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 })
 
-app.post('/upload', cors(), (req, res) => {
+app.options('/upload', cors(corsOptions))
+app.post('/upload', cors(corsOptions), (req, res) => {
   if (req.hostname === 'upload.lidong.me') {
     reqUrl = 'https://static.lidong.me/upload'
   } else if (req.hostname === 'upload.oonnnoo.com') {
